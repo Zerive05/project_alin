@@ -1,33 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Matriks</title>
+    <title>Matriks Kalkulator</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <h1>Kalkulator Matriks</h1>
-        <form id="matrixForm">
-            <label for="matrixA">Masukkan Matriks A (nilai dipisahkan dengan koma, baris dipisahkan dengan titik koma):</label>
-            <textarea id="matrixA" name="matrixA" rows="5" cols="50"></textarea>
-            <label for="matrixB">Masukkan Matriks B (nilai dipisahkan dengan koma, baris dipisahkan dengan titik koma):</label>
-            <textarea id="matrixB" name="matrixB" rows="5" cols="50"></textarea>
-            <div class="buttons">
-                <button type="button" onclick="processOperation('add')">Tambah Matriks</button>
-                <button type="button" onclick="processOperation('subtract')">Kurangi Matriks</button>
-                <button type="button" onclick="processOperation('multiply')">Kalikan Matriks</button>
-                <button type="button" onclick="processOperation('divide')">Bagi Matriks</button>
-                <button type="button" onclick="processOperation('transposeA')">Transpose Matriks A</button>
-                <button type="button" onclick="processOperation('transposeB')">Transpose Matriks B</button>
-                <button type="button" onclick="processOperation('determinantA')">Determinan Matriks A</button>
-                <button type="button" onclick="processOperation('determinantB')">Determinan Matriks B</button>
-            </div>
-        </form>
+
+        <div>
+            <label for="rowsA">Jumlah Baris Matriks A:</label>
+            <input type="number" id="rowsA" placeholder="Jumlah baris" min="1">
+
+            <label for="colsA">Jumlah Kolom Matriks A:</label>
+            <input type="number" id="colsA" placeholder="Jumlah kolom" min="1">
+
+            <button id="generateMatrixA">Set Matriks A</button>
+        </div>
+
+        <div id="matrixContainerA" class="matrix-container"></div>
+
+        <div>
+            <label for="rowsB">Jumlah Baris Matriks B:</label>
+            <input type="number" id="rowsB" placeholder="Jumlah baris" min="1">
+
+            <label for="colsB">Jumlah Kolom Matriks B:</label>
+            <input type="number" id="colsB" placeholder="Jumlah kolom" min="1">
+
+            <button id="generateMatrixB">Set Matriks B</button>
+        </div>
+
+        <div id="matrixContainerB" class="matrix-container"></div>
+
+        <div class="buttons">
+            <button data-operation="add">Tambah</button>
+            <button data-operation="subtract">Kurang</button>
+            <button data-operation="multiply">Kali</button>
+            <button data-operation="divide">Bagi</button>
+        </div>
+
         <div id="result"></div>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

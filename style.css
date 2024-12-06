@@ -1,3 +1,4 @@
+/* Gaya dasar */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f0f0f0;
@@ -7,6 +8,7 @@ body {
     height: 100vh;
     margin: 0;
 }
+
 .container {
     background-color: #fff;
     padding: 30px;
@@ -15,30 +17,30 @@ body {
     width: 90%;
     max-width: 700px;
 }
+
 h1 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
+
 label {
     font-weight: bold;
     color: #555;
-    display: block;
+    display: inline-block;
+    margin-right: 10px;
     margin-bottom: 10px;
 }
-textarea {
-    width: 100%;
-    padding: 15px;
+
+input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 20px;
-    font-size: 1em;
+    text-align: center;
 }
-.buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
+
 button {
     background-color: #007bff;
     color: #fff;
@@ -46,30 +48,85 @@ button {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    flex: 1 1 calc(33.333% - 10px);
 }
+
 button:hover {
     background-color: #0056b3;
 }
+
+/* Gaya untuk input ukuran matriks */
+.matrix-size {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.matrix-size button {
+    margin-left: 10px;
+}
+
+/* Gaya untuk grid input matriks */
+.matrix-input {
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: grid;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.grid input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.grid input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Gaya untuk hasil */
 #result {
     margin-top: 20px;
     font-weight: bold;
     color: #333;
     text-align: center;
 }
+
 .matrix {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
 }
+
 .matrix .content {
     display: grid;
-    gap: 5px;
-    border-right: solid 4px #0f1010;
-    border-left: solid 4px #0f1010;
-    padding: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 kolom */
+    gap: 10px;
+    padding: 10px;
 }
+
+.matrix .content .row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.matrix .content .cell {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
 .matrix .content div {
     width: 50px;
     height: 50px;

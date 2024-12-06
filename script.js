@@ -1,46 +1,113 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('matrixForm');
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const matrixA = document.getElementById('matrixA').value;
-        const matrixB = document.getElementById('matrixB').value;
-        const operation = document.querySelector('input[name="operation"]:checked').value;
-        processOperation(operation, matrixA, matrixB);
+    const matrixContainerA = document.getElementById('matrixContainerA');
+    const matrixContainerB = document.getElementById('matrixContainerB');
+    const rowsInputA = document.getElementById('rowsA');
+    const colsInputA = document.getElementById('colsA');
+    const rowsInputB = document.getElementById('rowsB');
+    const colsInputB = document.getElementById('colsB');
+    const generateMatrixAButton = document.getElementById('generateMatrixA');
+    const generateMatrixBButton = document.getElementById('generateMatrixB');
+    const resultContainer = document.getElementById('result');
+
+    // Fungsi untuk membuat input grid matriks
+    function createMatrixGrid(container, rows, cols) {
+        container.innerHTML = ''; // Hapus grid sebelumnya
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.step = 'any'; // Untuk mendukung angka desimal
+                input.dataset.row = i;
+                input.dataset.col = j;
+                grid.appendChild(input);
+            }
+        }
+
+        container.appendChild(grid);
+    }
+
+    // Event listener untuk membuat Matriks A
+    generateMatrixAButton.addEventListener('click', () => {
+        const rows = parseInt(rowsInputA.value, 10) || 0;
+        const cols = parseInt(colsInputA.value, 10) || 0;
+
+        if (rows > 0 && cols > 0) {
+            createMatrixGrid(matrixContainerA, rows, cols);
+        } else {
+            alert('Masukkan jumlah baris dan kolom yang valid untuk Matriks A.');
+        }
     });
 
+    // Event listener untuk membuat Matriks B
+    generateMatrixBButton.addEventListener('click', () => {
+        const rows = parseInt(rowsInputB.value, 10) || 0;
+        const cols = parseInt(colsInputB.value, 10) || 0;
+
+        if (rows > 0 && cols > 0) {
+            createMatrixGrid(matrixContainerB, rows, cols);
+        } else {
+            alert('Masukkan jumlah baris dan kolom yang valid untuk Matriks B.');
+        }
+    });
+
+    // Fungsi untuk membaca nilai matriks dari grid
+    function getMatrixValues(container) {
+        const inputs = container.querySelectorAll('input');
+        const matrix = [];
+        inputs.forEach((input, index) => {
+            const rowIndex = Math.floor(index / container.style.gridTemplateColumns.split(' ').length);
+            if (!matrix[rowIndex]) {
+                matrix[rowIndex] = [];
+            }
+            matrix[rowIndex].push(parseFloat(input.value) || 0); // Default 0 jika input kosong
+        });
+        return matrix;
+    }
+
+
+    // Fungsi untuk memproses operasi matriks
+    async function processOperation(operation) {
+        const matrixA = getMatrixValues(matrixContainerA);
+        const matrixB = getMatrixValues(matrixContainerB);
+
+        if (!matrixA.length || !matrixB.length) {
+            alert('Matriks A dan B diperlukan.');
+            return;
+        }
+
+        // Menyusun objek untuk dikirim ke server
+        const data = { operation, matrixA, matrixB };
+        console.log("Mengirim data:", data); // Debug log
+
+        try {
+            const response = await fetch('process.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            console.log("Hasil dari server:", result); // Debug log
+            if (result.error) {
+                resultContainer.innerHTML = `<p style="color: red;">${result.error}</p>`;
+            } else {
+                resultContainer.innerHTML = `<p>Hasil:<br>${result.html}</p>`;
+            }
+        } catch (error) {
+            resultContainer.innerHTML = `<p style="color: red;">Terjadi kesalahan: ${error.message}</p>`;
+        }
+    }
+
+    // Event listener untuk tombol operasi
     document.querySelectorAll('.buttons button').forEach(button => {
         button.addEventListener('click', () => {
-            const operation = button.getAttribute('onclick').match(/processOperation\('(\w+)'\)/)[1];
-            const matrixA = document.getElementById('matrixA').value;
-            const matrixB = document.getElementById('matrixB').value;
-            processOperation(operation, matrixA, matrixB);
+            const operation = button.getAttribute('data-operation');
+            console.log(`Tombol operasi: ${operation}`); // Debug log
+            processOperation(operation);
         });
     });
 });
-
-async function processOperation(operation) {
-    const matrixA = document.getElementById('matrixA').value.trim();
-    const matrixB = document.getElementById('matrixB').value.trim();
-
-    if (!matrixA) {
-        alert('Matriks A diperlukan.');
-        return;
-    }
-
-    try {
-        const response = await fetch('process.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ operation, matrixA, matrixB }),
-        });
-
-        const result = await response.json();
-        if (result.error) {
-            document.getElementById('result').innerHTML = `<p style="color: red;">${result.error}</p>`;
-        } else {
-            document.getElementById('result').innerHTML = `<p>Hasil:<br>${result.html}</p>`;
-        }
-    } catch (error) {
-        document.getElementById('result').innerHTML = `<p style="color: red;">Terjadi kesalahan: ${error.message}</p>`;
-    }
-}
