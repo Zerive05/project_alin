@@ -1,14 +1,14 @@
 <?php
 header('Content-Type: application/json');
-
 function matrixToHtml($matrix) {
-    $html = '<div class="matrix"><div class="bracket">[</div><div class="content">';
+    $columns = count($matrix[0]);
+    $html = '<div class="matrix"><div class="content" style="grid-template-columns: repeat(' . $columns . ', 1fr);">';
     foreach ($matrix as $row) {
         foreach ($row as $cell) {
             $html .= '<div>' . round($cell, 2) . '</div>';
         }
     }
-    $html .= '</div><div class="bracket">]</div></div>';
+    $html .= '</div></div>';
     return $html;
 }
 
