@@ -84,10 +84,8 @@ echo json_encode(['html' => matrixToHtml($result)]);
 
 <?php
 // Fungsi untuk mengonversi matriks hasil menjadi HTML
-function matrixToHtml($matrix)
-{
-    $html = '<div class="matrix">';
-    $html .= '<div class="content">';
+function matrixToHtml($matrix) {
+    $html = '<div class="matrix"><div class="content">';
     foreach ($matrix as $row) {
         $html .= '<div class="row">';
         foreach ($row as $value) {
@@ -95,8 +93,7 @@ function matrixToHtml($matrix)
         }
         $html .= '</div>';
     }
-    $html .= '</div>';
-    $html .= '</div>';
+    $html .= '</div></div>';
     return $html;
 }
 ?>

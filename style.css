@@ -5,7 +5,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: auto;
+    overflow: visible; /* Hindari overflow yang mengunci tinggi */
     margin: 0;
 }
 
@@ -16,6 +17,9 @@ body {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 700px;
+    display: block;/* Pastikan tidak ada pembatasan fleksibilitas */
+    height: auto;/* Tinggi menyesuaikan isi */
+    max-height: none;
 }
 
 h1 {
@@ -75,7 +79,18 @@ button:hover {
     display: grid;
     gap: 5px;
     justify-content: center;
+    align-items: center;
     margin-top: 10px;
+}
+
+.cell {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 1.1em;
+    line-height: 1.5;
 }
 
 .grid input {
@@ -104,15 +119,19 @@ button:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 10px;
 }
 
 .matrix .content {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    /* 2 kolom */
     gap: 10px;
     padding: 10px;
+    border-right: solid 4px #000;
+    border-left: solid 4px #000;
+    /* Tinggi akan otomatis sesuai isi */
+    max-height: none;
+    height: auto;
 }
 
 .matrix .content .row {
@@ -120,11 +139,14 @@ button:hover {
     justify-content: space-between;
 }
 
-.matrix .content .cell {
+.matrix .cell {
     text-align: center;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 1.1em;
+    line-height: 1.5;
 }
 
 .matrix .content div {

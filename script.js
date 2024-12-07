@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // Fungsi untuk memproses operasi matriks
+    // Perbarui fungsi processOperation
     async function processOperation(operation) {
         const matrixA = getMatrixValues(matrixContainerA);
         const matrixB = getMatrixValues(matrixContainerB);
@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Menyusun objek untuk dikirim ke server
         const data = { operation, matrixA, matrixB };
         console.log("Mengirim data:", data); // Debug log
 
@@ -92,10 +91,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const result = await response.json();
             console.log("Hasil dari server:", result); // Debug log
+
             if (result.error) {
                 resultContainer.innerHTML = `<p style="color: red;">${result.error}</p>`;
             } else {
-                resultContainer.innerHTML = `<p>Hasil:<br>${result.html}</p>`;
+                // Hapus hasil sebelumnya
+                resultContainer.innerHTML = '';
+
+                // Render grid hasil matriks
+                const matrixResult = result.matrix; // Pastikan server mengembalikan array 2D
+                const resultGrid = displayMatrix(matrixResult);
+
+                resultContainer.appendChild(resultGrid); // Tambahkan ke kontainer hasil
             }
         } catch (error) {
             resultContainer.innerHTML = `<p style="color: red;">Terjadi kesalahan: ${error.message}</p>`;
@@ -110,4 +117,25 @@ document.addEventListener('DOMContentLoaded', () => {
             processOperation(operation);
         });
     });
+
+    // Fungsi untuk membuat elemen grid hasil matriks
+    function displayMatrix(matrix) {
+        const rows = matrix.length;
+        const cols = matrix[0].length;
+
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`; // Set jumlah kolom sesuai matriks
+
+        matrix.forEach(row => {
+            row.forEach(value => {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.textContent = value; // Tampilkan nilai di setiap cell
+                grid.appendChild(cell);
+            });
+        });
+
+        return grid;
+    }
 });
