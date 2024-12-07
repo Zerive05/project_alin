@@ -57,14 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fungsi untuk membaca nilai matriks dari grid
     function getMatrixValues(container) {
         const inputs = container.querySelectorAll('input');
-        const matrix = [];
-        inputs.forEach((input, index) => {
-            const rowIndex = Math.floor(index / container.style.gridTemplateColumns.split(' ').length);
-            if (!matrix[rowIndex]) {
-                matrix[rowIndex] = [];
-            }
-            matrix[rowIndex].push(parseFloat(input.value) || 0); // Default 0 jika input kosong
+        const rows = parseInt(container.parentElement.querySelector('input[data-rows]').value, 10);
+        const cols = parseInt(container.parentElement.querySelector('input[data-cols]').value, 10);
+
+        if (!rows || !cols) {
+            console.error('Ordo matriks tidak valid');
+            return []; // Kembalikan array kosong jika ordo tidak valid
+        }
+
+        const matrix = Array.from({ length: rows }, () => Array(cols).fill(0));
+        inputs.forEach((input) => {
+            const row = parseInt(input.dataset.row, 10);
+            const col = parseInt(input.dataset.col, 10);
+            matrix[row][col] = parseFloat(input.value) || 0; // Default ke 0 jika kosong
         });
+
+        console.log('Matriks A/B yang dikirim:', matrix); // Debug log
         return matrix;
     }
 
@@ -94,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (result.error) {
                 resultContainer.innerHTML = `<p style="color: red;">${result.error}</p>`;
-            } else {
+            } else if (result.matrix) {
                 // Hapus hasil sebelumnya
                 resultContainer.innerHTML = '';
 
@@ -103,6 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const resultGrid = displayMatrix(matrixResult);
 
                 resultContainer.appendChild(resultGrid); // Tambahkan ke kontainer hasil
+            } else {
+                resultContainer.innerHTML = `<p style="color: red;">Hasil tidak valid.</p>`;
             }
         } catch (error) {
             resultContainer.innerHTML = `<p style="color: red;">Terjadi kesalahan: ${error.message}</p>`;
